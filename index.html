@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator+ | Pharma Stability Chamber Tools</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --card: #1a2332;
+    --border: #2d3a4f;
+    --text: #e6edf3;
+    --muted: #8b9cb3;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  header h1 span { color: var(--accent); }
+  nav {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  nav button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  nav button.active, nav button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  h2 { margin-top: 0; font-size: 1.35rem; }
+  h3 { margin: 1.25rem 0 0.5rem; font-size: 1.1rem; }
+  label {
+    display: block;
+    margin: 0.75rem 0 0.25rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  input, select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 1rem;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+  button.primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  button.primary:hover { background: var(--accent-hover); }
+  .result {
+    background: #0d1117;
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    border-radius: 0 6px 6px 0;
+    margin-top: 1rem;
+    font-family: ui-monospace, monospace;
+  }
+  .result strong { color: var(--success); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .tile {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .tile:hover { border-color: var(--accent); }
+  .tile h3 { margin: 0 0 0.5rem; }
+  .muted { color: var(--muted); font-size: 0.875rem; }
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    margin-right: 0.25rem;
+  }
+  .warn { color: var(--warning); }
+  .ok { color: var(--success); }
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Calculator<span>+</span></h1>
+  <nav>
+    <button class="active" onclick="show('home')">Home</button>
+    <button onclick="show('rtd')">RTD Calculator</button>
+    <button onclick="show('ma')">4–20 mA</button>
+    <button onclick="show('diag')">Diagnosis</button>
+    <button onclick="show('library')">Sensor Library</button>
+    <button onclick="show('light')">Photostability</button>
+  </nav>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section id="home">
+    <div class="card">
+      <h2>Calculator+ for Pharmaceutical Stability Chambers</h2>
+      <p>A single tool for calibration and diagnosis of temperature, humidity, light, and electrical signals used in ICH stability chambers.</p>
+      <p class="muted">First generation prototype — RTD (IEC 60751), 4–20 mA scaling, diagnostic helpers, and sensor categories.</p>
+    </div>
+    <div class="grid">
+      <div class="tile" onclick="show('rtd')">
+        <h3>RTD Calculator</h3>
+        <p class="muted">Pt100 / Pt1000 Callendar–Van Dusen. Temperature ↔ Resistance, tolerance classes.</p>
+      </div>
+      <div class="tile" onclick="show('ma')">
+        <h3>4–20 mA Scaling</h3>
+        <p class="muted">Linear scaling between engineering units and loop current. Forward and reverse.</p>
+      </div>
+      <div class="tile" onclick="show('diag')">
+        <h3>Diagnosis</h3>
+        <p class="muted">Guided checks for RTD open/short/drift and 4–20 mA loop faults.</p>
+      </div>
+      <div class="tile" onclick="show('library')">
+        <h3>Sensor Library</h3>
+        <p class="muted">Categories by chamber type and signal. Temperature, humidity, light, pressure.</p>
+      </div>
+      <div class="tile" onclick="show('light')">
+        <h3>Photostability</h3>
+        <p class="muted">ICH Q1B light dose calculator (lux-hours & UV Wh/m²).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RTD -->
+  <section id="rtd" class="hidden">
+    <div class="card">
+      <h2>RTD Calculator <span class="badge">IEC 60751</span></h2>
+      <p class="muted">Callendar–Van Dusen equation for platinum RTDs.</p>
+      <div class="row">
+        <div>
+          <label>Sensor Type</label>
+          <select id="rtdType">
+            <option value="100">Pt100 (R0 = 100 Ω)</option>
+            <option value="1000">Pt1000 (R0 = 1000 Ω)</option>
+          </select>
+        </div>
+        <div>
+          <label>Direction</label>
+          <select id="rtdDir">
+            <option value="t2r">Temperature → Resistance</option>
+            <option value="r2t">Resistance → Temperature</option>
+          </select>
+        </div>
+      </div>
+      <label id="rtdInputLabel">Temperature (°C)</label>
+      <input type="number" id="rtdInput" step="any" value="25" placeholder="Enter value">
+      <label>Tolerance Class</label>
+      <select id="rtdClass">
+        <option value="AA">Class AA</option>
+        <option value="A" selected>Class A</option>
+        <option value="B">Class B</option>
+        <option value="C">Class C</option>
+      </select>
+      <button class="primary" onclick="calcRTD()">Calculate</button>
+      <div id="rtdResult" class="result" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- 4-20 mA -->
+  <section id="ma" class="hidden">
+    <div class="card">
+      <h2>4–20 mA Scaling</h2>
+      <p class="muted">Linear conversion between process value and loop current.</p>
+      <div class="row">
+        <div>
+          <label>Lower Range Value (LRV)</label>
+          <input type="number" id="lrv" step="any" value="0">
+        </div>
+        <div>
+          <label>Upper Range Value (URV)</label>
+          <input type="number" id="urv" step="any" value="100">
+        </div>
+      </div>
+      <label>Direction</label>
+      <select id="maDir">
+        <option value="eu2ma">Engineering Units → mA</option>
+        <option value="ma2eu">mA → Engineering Units</option>
+      </select>
+      <label id="maInputLabel">Process Value</label>
+      <input type="number" id="maInput" step="any" value="50" placeholder="Enter value">
+      <button class="primary" onclick="calcMA()">Calculate</button>
+      <div id="maResult" class="result" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- DIAGNOSIS -->
+  <section id="diag" class="hidden">
+    <div class="card">
+      <h2>Diagnosis Helpers</h2>
+      <p>Select a symptom category to see ranked checks. Use the calculators above to verify expected values.</p>
+      <label>Category</label>
+      <select id="diagCat" onchange="showDiag()">
+        <option value="">— Select —</option>
+        <option value="rtd">RTD / Temperature Sensor</option>
+        <option value="ma">4–20 mA Loop</option>
+        <option value="hum">Humidity Sensor</option>
+      </select>
+      <div id="diagContent" style="margin-top:1rem;"></div>
+    </div>
+  </section>
+
+  <!-- LIBRARY -->
+  <section id="library" class="hidden">
+    <div class="card">
+      <h2>Sensor & Signal Library</h2>
+      <h3>Temperature</h3>
+      <p>RTD (Pt100/Pt1000, IEC 60751), Thermocouple, Thermistor. Typical outputs: 4–20 mA, 0–10 V, digital.</p>
+      <h3>Humidity</h3>
+      <p>Capacitive polymer sensors, combined T/RH probes. Common in ICH 25 °C/60 % RH and 40 °C/75 % RH chambers.</p>
+      <h3>Light (Photostability)</h3>
+      <p>Lux meters and UVA radiometers for ICH Q1B (1.2 M lux-hours visible + 200 Wh/m² UV).</p>
+      <h3>Other</h3>
+      <p>CO₂, differential pressure, door switches, digital I/O. Chamber types: reach-in, walk-in, photostability, CO₂ incubators.</p>
+    </div>
+  </section>
+
+  <!-- PHOTOSTABILITY -->
+  <section id="light" class="hidden">
+    <div class="card">
+      <h2>Photostability Dose Calculator <span class="badge">ICH Q1B</span></h2>
+      <p class="muted">Estimate exposure time from measured intensity.</p>
+      <label>Visible Light Intensity (lux)</label>
+      <input type="number" id="lux" step="any" value="10000">
+      <label>UV Intensity (W/m²)</label>
+      <input type="number" id="uv" step="any" value="1.0">
+      <button class="primary" onclick="calcLight()">Calculate Dose Time</button>
+      <div id="lightResult" class="result" style="display:none;"></div>
+      <p class="muted" style="margin-top:1rem;">Targets: 1.2 million lux-hours (visible) and 200 Wh/m² (near UV).</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Calculator+ · First Generation Prototype · Pharma Stability Chamber Calibration & Diagnosis<br>
+  RTD formulas per IEC 60751 · 4–20 mA linear scaling · For educational and field support use
+</footer>
+
+<script>
+// Navigation
+function show(id) {
+  document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// CVD constants
+const A = 3.9083e-3, B = -5.775e-7, C = -4.183e-12;
+
+function rtdResistance(t, r0) {
+  if (t >= 0) return r0 * (1 + A*t + B*t*t);
+  return r0 * (1 + A*t + B*t*t + C*(t-100)*t*t*t);
+}
+
+function rtdTemperature(r, r0) {
+  if (r >= r0) {
+    const disc = A*A - 4*B*(1 - r/r0);
+    return (-A + Math.sqrt(disc)) / (2*B);
+  }
+  // Newton for t < 0
+  let t = (r - r0) / (r0 * A);
+  t = Math.max(t, -200);
+  for (let i = 0; i < 40; i++) {
+    const rc = rtdResistance(t, r0);
+    const f = rc - r;
+    if (Math.abs(f) < 1e-6) return t;
+    let dr = r0 * (A + 2*B*t);
+    if (t < 0) dr += r0 * C * (4*t*t*t - 300*t*t);
+    if (Math.abs(dr) < 1e-12) break;
+    const tn = t - f/dr;
+    t = Math.max(Math.min(tn, 0), -200);
+  }
+  return t;
+}
+
+function tolerance(t, cls) {
+  const at = Math.abs(t);
+  if (cls === 'AA') return 0.10 + 0.0017*at;
+  if (cls === 'A')  return 0.15 + 0.002*at;
+  if (cls === 'B')  return 0.30 + 0.005*at;
+  return 0.60 + 0.01*at;
+}
+
+function calcRTD() {
+  const r0 = parseFloat(document.getElementById('rtdType').value);
+  const dir = document.getElementById('rtdDir').value;
+  const val = parseFloat(document.getElementById('rtdInput').value);
+  const cls = document.getElementById('rtdClass').value;
+  const out = document.getElementById('rtdResult');
+  if (isNaN(val)) { out.style.display='block'; out.innerHTML='Enter a valid number.'; return; }
+
+  let html = '';
+  if (dir === 't2r') {
+    const r = rtdResistance(val, r0);
+    const tol = tolerance(val, cls);
+    html = `<strong>${r.toFixed(3)} Ω</strong><br>Temperature: ${val} °C<br>Class ${cls} tolerance: ±${tol.toFixed(3)} °C`;
+  } else {
+    const t = rtdTemperature(val, r0);
+    const tol = tolerance(t, cls);
+    html = `<strong>${t.toFixed(3)} °C</strong><br>Resistance: ${val} Ω<br>Class ${cls} tolerance: ±${tol.toFixed(3)} °C`;
+  }
+  out.style.display = 'block';
+  out.innerHTML = html;
+}
+
+// Update RTD input label
+document.getElementById('rtdDir').addEventListener('change', function() {
+  document.getElementById('rtdInputLabel').textContent =
+    this.value === 't2r' ? 'Temperature (°C)' : 'Resistance (Ω)';
+});
+
+function calcMA() {
+  const lrv = parseFloat(document.getElementById('lrv').value);
+  const urv = parseFloat(document.getElementById('urv').value);
+  const dir = document.getElementById('maDir').value;
+  const val = parseFloat(document.getElementById('maInput').value);
+  const out = document.getElementById('maResult');
+  if (isNaN(lrv) || isNaN(urv) || isNaN(val) || urv === lrv) {
+    out.style.display='block'; out.innerHTML='Check range values.'; return;
+  }
+  let html = '';
+  if (dir === 'eu2ma') {
+    const ma = 4 + 16 * (val - lrv) / (urv - lrv);
+    html = `<strong>${ma.toFixed(3)} mA</strong><br>Process value ${val} → ${ma.toFixed(3)} mA<br>Range: ${lrv} to ${urv}`;
+  } else {
+    const eu = lrv + (val - 4) / 16 * (urv - lrv);
+    html = `<strong>${eu.toFixed(3)}</strong> (engineering units)<br>${val} mA → ${eu.toFixed(3)}<br>Range: ${lrv} to ${urv}`;
+  }
+  out.style.display = 'block';
+  out.innerHTML = html;
+}
+
+document.getElementById('maDir').addEventListener('change', function() {
+  document.getElementById('maInputLabel').textContent =
+    this.value === 'eu2ma' ? 'Process Value' : 'Current (mA)';
+});
+
+function calcLight() {
+  const lux = parseFloat(document.getElementById('lux').value);
+  const uv = parseFloat(document.getElementById('uv').value);
+  const out = document.getElementById('lightResult');
+  if (isNaN(lux) || isNaN(uv) || lux <= 0 || uv <= 0) {
+    out.style.display='block'; out.innerHTML='Enter positive intensities.'; return;
+  }
+  const hoursVis = 1200000 / lux;
+  const hoursUV = 200 / uv;
+  out.style.display = 'block';
+  out.innerHTML = `<strong>Visible:</strong> ${hoursVis.toFixed(1)} hours<br><strong>UV:</strong> ${hoursUV.toFixed(1)} hours<br><span class="muted">Use the longer time to meet both ICH Q1B targets.</span>`;
+}
+
+function showDiag() {
+  const cat = document.getElementById('diagCat').value;
+  const el = document.getElementById('diagContent');
+  const content = {
+    rtd: `<h3>RTD Diagnosis Path</h3>
+      <ol>
+        <li>Measure resistance at transmitter terminals (sensor disconnected).</li>
+        <li>Compare to expected value using the RTD Calculator (e.g. Pt100 ≈ 109.73 Ω at 25 °C).</li>
+        <li><strong>Infinite / open</strong> → check leads, replace probe if element open.</li>
+        <li><strong>Near 0 Ω / short</strong> → inspect for damage or moisture; replace if shorted.</li>
+        <li><strong>Out of tolerance but finite</strong> → possible drift, wrong type, or lead resistance. Verify with Class tolerance.</li>
+        <li>Simulate expected resistance into transmitter and check 4–20 mA output against scaling calculator.</li>
+      </ol>`,
+    ma: `<h3>4–20 mA Loop Diagnosis</h3>
+      <ol>
+        <li>Measure actual loop current (series meter or clamp).</li>
+        <li>0 mA → open loop or no power. Check voltage at transmitter.</li>
+        <li>< ~3.6 mA → low fault / sensor open (NAMUR).</li>
+        <li>4–20 mA but wrong value → use scaling calculator to verify expected mA vs displayed EU.</li>
+        <li>> ~21 mA → high fault / short / over-range.</li>
+        <li>Substitute loop calibrator at transmitter terminals. If receiver tracks, problem is in sensor/transmitter.</li>
+      </ol>`,
+    hum: `<h3>Humidity Sensor Checks</h3>
+      <ul>
+        <li>Compare probe to calibrated reference hygrometer at same location.</li>
+        <li>Look for condensation, contamination, or recent high-RH exposure (hysteresis).</li>
+        <li>Verify temperature compensation is active.</li>
+        <li>Check 4–20 mA (or digital) output against expected %RH using the scaling tool.</li>
+        <li>Review calibration history for progressive drift.</li>
+      </ul>`
+  };
+  el.innerHTML = content[cat] || '';
+}
+</script>
+</body>
+</html>
