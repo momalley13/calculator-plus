@@ -11,7 +11,7 @@
 
 1. [Overview](#overview)
 2. [RTD Calculator (IEC 60751)](#rtd-calculator-iec-60751)
-3. [4–20 mA Scaling Module](#420-ma-scaling-module)
+3. [mA Scaling Module (4–20 mA and 0–20 mA)](#ma-scaling-module-420-ma-and-020-ma)
 4. [0–5 Vdc / 0–10 Vdc Scaling Module](#05-vdc--010-vdc-scaling-module)
 5. [Diagnosis Helpers](#diagnosis-helpers)
 6. [Sensor Library](#sensor-library)
@@ -92,33 +92,45 @@ Coefficients (IEC 60751, α = 0.003851):
 
 ---
 
-## 4–20 mA Scaling Module
+## mA Scaling Module (4–20 mA and 0–20 mA)
 
 ### Purpose
-Bidirectional linear conversion between engineering units (process value) and loop current for standard 4–20 mA transmitters.
+Bidirectional linear conversion between engineering units (process value) and loop current for both the common 4–20 mA live-zero standard and 0–20 mA transmitters.
 
 ### Formulas
 
-**Engineering Units → mA:**
+**4–20 mA — Engineering Units → mA:**
 \[
 I = 4 + 16 \times \frac{(PV - LRV)}{(URV - LRV)}
 \]
 
-**mA → Engineering Units:**
+**4–20 mA — mA → Engineering Units:**
 \[
 PV = LRV + \frac{(I - 4)}{16} \times (URV - LRV)
 \]
 
-### NAMUR NE43 Fault Bands (reference)
+**0–20 mA — Engineering Units → mA:**
+\[
+I = 20 \times \frac{(PV - LRV)}{(URV - LRV)}
+\]
+
+**0–20 mA — mA → Engineering Units:**
+\[
+PV = LRV + \frac{I}{20} \times (URV - LRV)
+\]
+
+### NAMUR NE43 Fault Bands (4–20 mA reference)
 - < 3.6 mA → low fault / sensor open
 - 4–20 mA → normal operating range
 - > 21 mA → high fault / over-range / short
 
 ### Typical Uses in Stability Chambers
-- Temperature transmitters
-- Humidity transmitters
-- Differential pressure transmitters
-- CO₂ transmitters
+- Temperature, humidity, differential pressure, and CO₂ transmitters (most commonly 4–20 mA)
+- Some older or specialized transmitters use 0–20 mA
+
+### Diagnosis Notes
+- For 4–20 mA: 0 mA indicates open loop or no power.
+- For 0–20 mA: 0 mA may be a valid zero reading or an open circuit — verify power and use the calculator to confirm expected value.
 
 ---
 
@@ -163,15 +175,13 @@ Guided, symptom-based checklists that integrate with the calculators. Use the re
 3. Infinite resistance → open circuit (leads or element).
 4. Near 0 Ω → short.
 5. Finite but outside tolerance → drift, wrong type, or lead resistance.
-6. Simulate expected resistance into transmitter and verify 4–20 mA output.
+6. Simulate expected resistance into transmitter and verify output.
 
-**4–20 mA Loop**
-1. Measure actual loop current.
-2. 0 mA → open loop or no power.
-3. < ~3.6 mA → low fault (NAMUR).
-4. Value within 4–20 mA but incorrect → use scaling calculator to verify expected vs displayed.
-5. > ~21 mA → high fault.
-6. Substitute loop calibrator to isolate sensor/transmitter from receiver.
+**mA Loop (4–20 / 0–20)**
+1. Measure loop current.
+2. For 4–20 mA: 0 mA = open/power; <~3.6 mA = low fault; >~21 mA = high fault.
+3. For 0–20 mA: 0 mA may be valid zero or open — verify with calculator and power.
+4. Compare expected vs measured using the mA Scaling calculator.
 
 **0–5 V / 0–10 V**
 1. Measure voltage at sensor/transmitter output.
@@ -198,12 +208,12 @@ Guided, symptom-based checklists that integrate with the calculators. Use the re
 
 High-level categorization of sensors and signals commonly found in pharmaceutical stability equipment.
 
-| Category       | Typical Sensors                  | Common Outputs                  | Chamber Types                  |
-|----------------|----------------------------------|---------------------------------|--------------------------------|
-| Temperature    | Pt100/Pt1000 RTD, Thermocouple, Thermistor | 4–20 mA, 0–5 V, 0–10 V, digital | All stability chambers        |
-| Humidity       | Capacitive polymer, combined T/RH | 4–20 mA, 0–10 V, digital       | ICH 25 °C/60 % RH, 40 °C/75 % RH |
-| Light          | Lux meter, UV radiometer         | 4–20 mA, 0–5 V, 0–10 V, digital | Photostability chambers       |
-| Other          | CO₂, differential pressure, door switches | 4–20 mA, digital             | CO₂ incubators, walk-ins      |
+| Category       | Typical Sensors                  | Common Outputs                          | Chamber Types                  |
+|----------------|----------------------------------|-----------------------------------------|--------------------------------|
+| Temperature    | Pt100/Pt1000 RTD, Thermocouple, Thermistor | 4–20 mA, 0–20 mA, 0–5 V, 0–10 V, digital | All stability chambers        |
+| Humidity       | Capacitive polymer, combined T/RH | 4–20 mA, 0–10 V, digital               | ICH 25 °C/60 % RH, 40 °C/75 % RH |
+| Light          | Lux meter, UV radiometer         | 4–20 mA, 0–5 V, 0–10 V, digital         | Photostability chambers       |
+| Other          | CO₂, differential pressure, door switches | 4–20 mA, digital                     | CO₂ incubators, walk-ins      |
 
 ---
 
