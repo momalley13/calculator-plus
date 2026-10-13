@@ -2,13 +2,18 @@
 
 Calculator+ is a single-app toolkit for calibrating and diagnosing sensors, probes, and transmitters used in pharmaceutical environmental stability chambers.
 
-## Features (v1)
+## Features
 
 - **RTD Calculator** — Pt100 / Pt1000 using the IEC 60751 Callendar–Van Dusen equation (temperature ↔ resistance) with tolerance classes
 - **4–20 mA Scaling** — bidirectional linear conversion between engineering units and loop current
-- **Diagnosis helpers** — guided checks for RTD open/short/drift and 4–20 mA loop faults
+- **Diagnosis helpers** — guided checks for RTD, 4–20 mA loop, humidity, and photostability light sensors
 - **Sensor Library** — overview of temperature, humidity, light, and other signals by chamber type
-- **Photostability** — ICH Q1B dose calculator (1.2 M lux-hours visible + 200 Wh/m² UV)
+- **Photostability Dose Calculator** — ICH Q1B exposure time (1.2 M lux-hours visible + 200 Wh/m² UV)
+- **Photostability Light Sensor Calibration** — procedure + offset / correction-factor calculator for lux and UV sensors
+
+## Documentation
+
+Full documentation for every component, formulas, standards references, and usage notes is available in [DOCUMENTATION.md](DOCUMENTATION.md).
 
 ## Usage
 
