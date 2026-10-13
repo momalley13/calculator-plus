@@ -12,12 +12,13 @@
 1. [Overview](#overview)
 2. [RTD Calculator (IEC 60751)](#rtd-calculator-iec-60751)
 3. [4–20 mA Scaling Module](#420-ma-scaling-module)
-4. [Diagnosis Helpers](#diagnosis-helpers)
-5. [Sensor Library](#sensor-library)
-6. [Photostability Dose Calculator (ICH Q1B)](#photostability-dose-calculator-ich-q1b)
-7. [Photostability Light Sensor Calibration](#photostability-light-sensor-calibration)
-8. [Standards Reference](#standards-reference)
-9. [Usage Notes](#usage-notes)
+4. [0–5 Vdc / 0–10 Vdc Scaling Module](#05-vdc--010-vdc-scaling-module)
+5. [Diagnosis Helpers](#diagnosis-helpers)
+6. [Sensor Library](#sensor-library)
+7. [Photostability Dose Calculator (ICH Q1B)](#photostability-dose-calculator-ich-q1b)
+8. [Photostability Light Sensor Calibration](#photostability-light-sensor-calibration)
+9. [Standards Reference](#standards-reference)
+10. [Usage Notes](#usage-notes)
 
 ---
 
@@ -121,6 +122,35 @@ PV = LRV + \frac{(I - 4)}{16} \times (URV - LRV)
 
 ---
 
+## 0–5 Vdc / 0–10 Vdc Scaling Module
+
+### Purpose
+Bidirectional linear scaling between engineering units and voltage for 0–5 Vdc and 0–10 Vdc transmitters and sensors. Common on some photostability light sensors (lux or UV) and other process transmitters.
+
+### Formulas
+
+**Engineering Units → Voltage (0–5 V or 0–10 V):**
+\[
+V = V_{max} \times \frac{(PV - LRV)}{(URV - LRV)}
+\]
+where \( V_{max} = 5 \) or \( 10 \).
+
+**Voltage → Engineering Units:**
+\[
+PV = LRV + \frac{V}{V_{max}} \times (URV - LRV)
+\]
+
+### Typical Uses in Photostability Systems
+- Lux or UV radiometer transmitters with 0–5 V or 0–10 V outputs proportional to intensity.
+- Other sensors (temperature, humidity, pressure) that use voltage rather than current loops.
+
+### Diagnosis Notes
+- 0 V → open circuit, no power, or failed sensor.
+- Compare measured voltage against the expected value from the scaling calculator.
+- Verify supply voltage and wiring polarity.
+
+---
+
 ## Diagnosis Helpers
 
 Guided, symptom-based checklists that integrate with the calculators. Use the relevant calculator to generate expected values, then compare against measured values.
@@ -143,6 +173,12 @@ Guided, symptom-based checklists that integrate with the calculators. Use the re
 5. > ~21 mA → high fault.
 6. Substitute loop calibrator to isolate sensor/transmitter from receiver.
 
+**0–5 V / 0–10 V**
+1. Measure voltage at sensor/transmitter output.
+2. 0 V → open, no power, or failed sensor.
+3. Compare expected vs measured using the Voltage Scaling calculator.
+4. Check supply voltage and wiring.
+
 **Humidity Sensor**
 - Compare to calibrated reference hygrometer at the same location.
 - Check for condensation, contamination, or hysteresis after high-RH exposure.
@@ -162,12 +198,12 @@ Guided, symptom-based checklists that integrate with the calculators. Use the re
 
 High-level categorization of sensors and signals commonly found in pharmaceutical stability equipment.
 
-| Category       | Typical Sensors                  | Common Outputs          | Chamber Types                  |
-|----------------|----------------------------------|-------------------------|--------------------------------|
-| Temperature    | Pt100/Pt1000 RTD, Thermocouple, Thermistor | 4–20 mA, 0–10 V, digital | All stability chambers        |
-| Humidity       | Capacitive polymer, combined T/RH | 4–20 mA, digital       | ICH 25 °C/60 % RH, 40 °C/75 % RH |
-| Light          | Lux meter, UV radiometer         | Analog / digital        | Photostability chambers       |
-| Other          | CO₂, differential pressure, door switches | 4–20 mA, digital     | CO₂ incubators, walk-ins      |
+| Category       | Typical Sensors                  | Common Outputs                  | Chamber Types                  |
+|----------------|----------------------------------|---------------------------------|--------------------------------|
+| Temperature    | Pt100/Pt1000 RTD, Thermocouple, Thermistor | 4–20 mA, 0–5 V, 0–10 V, digital | All stability chambers        |
+| Humidity       | Capacitive polymer, combined T/RH | 4–20 mA, 0–10 V, digital       | ICH 25 °C/60 % RH, 40 °C/75 % RH |
+| Light          | Lux meter, UV radiometer         | 4–20 mA, 0–5 V, 0–10 V, digital | Photostability chambers       |
+| Other          | CO₂, differential pressure, door switches | 4–20 mA, digital             | CO₂ incubators, walk-ins      |
 
 ---
 
