@@ -5,9 +5,9 @@ Calculator+ is a single-app toolkit for calibrating and diagnosing sensors, prob
 ## Features
 
 - **RTD Calculator** — Pt100 / Pt1000 using the IEC 60751 Callendar–Van Dusen equation (temperature ↔ resistance) with tolerance classes
-- **4–20 mA Scaling** — bidirectional linear conversion between engineering units and loop current
+- **mA Scaling** — bidirectional linear conversion for both 4–20 mA and 0–20 mA
 - **0–5 Vdc / 0–10 Vdc Scaling** — bidirectional linear scaling for voltage-output sensors (common on photostability light sensors)
-- **Diagnosis helpers** — guided checks for RTD, 4–20 mA loop, voltage outputs, humidity, and photostability light sensors
+- **Diagnosis helpers** — guided checks for RTD, mA loops, voltage outputs, humidity, and photostability light sensors
 - **Sensor Library** — overview of temperature, humidity, light, and other signals by chamber type
 - **Photostability Dose Calculator** — ICH Q1B exposure time (1.2 M lux-hours visible + 200 Wh/m² UV)
 - **Photostability Light Sensor Calibration** — procedure + offset / correction-factor calculator for lux and UV sensors
